@@ -10,7 +10,7 @@ export default function Philosophy() {
   }, []);
 
   return (
-    <section className="px-24 max-w-3xl">
+    <section id="ethos" className="px-6 md:px-24 py-32 max-w-3xl">
       <h2 className="font-serif text-4xl mb-12">
         Legal Ethos
       </h2>

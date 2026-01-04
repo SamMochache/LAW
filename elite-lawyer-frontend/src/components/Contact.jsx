@@ -1,6 +1,6 @@
 export default function Contact() {
   return (
-    <section className="px-24 pb-40 max-w-xl">
+    <section id="contact" className="px-6 md:px-24 pb-40 max-w-xl">
       <h2 className="font-serif text-4xl mb-8">
         Consultations
       </h2>

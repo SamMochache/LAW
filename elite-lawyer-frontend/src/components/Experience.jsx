@@ -48,7 +48,7 @@ export default function Experience() {
   }
 
   return (
-    <section className="px-24 max-w-4xl">
+    <section id="experience" className="px-6 md:px-24 py-32 max-w-4xl">
       <h2 className="font-serif text-4xl mb-16">Selected Matters</h2>
 
       <div className="space-y-12">

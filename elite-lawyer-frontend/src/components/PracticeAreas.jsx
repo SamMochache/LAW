@@ -49,17 +49,28 @@ export default function PracticeAreas() {
   }
 
   return (
-    <section className="px-24">
-      <h2 className="font-serif text-4xl mb-16">Practice Areas</h2>
+  <section id="practice" className="px-6 md:px-24 py-24 md:py-32">
+    <h2 className="font-serif text-3xl md:text-4xl mb-12 md:mb-16">
+      Practice Areas
+    </h2>
 
-      <div className="grid grid-cols-3 gap-16">
-        {areas.map(area => (
-          <div key={area.id}>
-            <h3 className="text-xl mb-4">{area.title}</h3>
-            <p className="text-muted">{area.description}</p>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 md:gap-16">
+      {areas.map(area => (
+        <div
+          key={area.id}
+          className="space-y-4 md:space-y-6"
+        >
+          <h3 className="text-lg md:text-xl font-medium">
+            {area.title}
+          </h3>
+
+          <p className="text-muted leading-relaxed">
+            {area.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </section>
+);
+
 }

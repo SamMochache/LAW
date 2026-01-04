@@ -48,7 +48,7 @@ export default function Credentials() {
   }
 
   return (
-    <section className="px-24">
+    <section id="credentials" className="px-6 md:px-24 py-32">
       <h2 className="font-serif text-4xl mb-16">Credentials</h2>
 
       <ul className="list-disc list-inside space-y-2">

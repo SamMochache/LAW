@@ -1,6 +1,6 @@
 export default function About() {
   return (
-    <section className="px-24 py-32 max-w-5xl">
+    <section id="about" className="px-6 md:px-24 py-32 max-w-5xl">
       <h2 className="font-serif text-4xl mb-12">
         About Richard Nyamwange.
       </h2>
