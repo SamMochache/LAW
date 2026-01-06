@@ -5,6 +5,7 @@ import Experience from "../components/Experience";
 import Credentials from "../components/Credentials";
 import Philosophy from "../components/Philosophy";
 import Contact from "../components/Contact";
+import TrustSignals from "../components/TrustSignals";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Hero />
       <About />
       <PracticeAreas />
+      <TrustSignals />
       <Experience />
       <Credentials />
       <Philosophy />
