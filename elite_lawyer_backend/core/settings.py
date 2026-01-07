@@ -51,7 +51,10 @@ MIDDLEWARE = [
 ]
 
 # CORS Configuration - ALLOW ALL FOR NOW (tighten after testing)
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = [
+    'http://localhost:5173',
+    'https://richardnyamwange.vercel.app',  # Add your actual frontend URL
+]
 CORS_ALLOW_CREDENTIALS = True
 
 REST_FRAMEWORK = {
