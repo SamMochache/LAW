@@ -1,24 +1,27 @@
 {
   "version": 2,
-  "env": {
-    "DJANGO_SETTINGS_MODULE": "core.settings",
-    "DEBUG": "False"
-  },
   "builds": [
     {
-      "src": "core/wsgi.py",
+      "src": "elite-lawyer-backend/wsgi.py",
       "use": "@vercel/python",
       "config": { "maxLambdaSize": "15mb" }
+    },
+    {
+      "src": "elite-lawyer-backend/build.sh",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "staticfiles"
+      }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
-      "dest": "core/wsgi.py"
+      "dest": "elite-lawyer-backend/wsgi.py"
     },
     {
       "src": "/(.*)",
-      "dest": "/"
+      "dest": "elite-lawyer-backend/wsgi.py"
     }
   ]
 }
