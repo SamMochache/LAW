@@ -1,0 +1,27 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "elite-lawyer-backend/core/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "maxLambdaSize": "15mb" }
+    },
+    {
+      "src": "elite-lawyer-frontend/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "elite-lawyer-backend/core/wsgi.py"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "elite-lawyer-frontend/$1"
+    }
+  ]
+}
