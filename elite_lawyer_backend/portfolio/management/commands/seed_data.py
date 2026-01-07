@@ -59,7 +59,7 @@ class Command(BaseCommand):
         experiences = [
             {
                 "title": "Cross-Border Acquisition - Regional Telecommunications Leader",
-                "summary": "Lead counsel in $850M acquisition of East African telecommunications infrastructure assets. Negotiated complex regulatory approvals across five jurisdictions, structured tax-efficient holdco arrangements, and coordinated multi-jurisdictional due diligence teams."
+                "summary": "Lead counsel in $5M acquisition of East African telecommunications infrastructure assets. Negotiated complex regulatory approvals across five jurisdictions, structured tax-efficient holdco arrangements, and coordinated multi-jurisdictional due diligence teams."
             },
             {
                 "title": "Hostile Takeover Defense - Listed Financial Institution",
@@ -71,7 +71,7 @@ class Command(BaseCommand):
             },
             {
                 "title": "Private Equity Carve-Out - Manufacturing Conglomerate",
-                "summary": "Advised international PE firm on $420M carve-out of manufacturing division from publicly-listed conglomerate. Structured management equity incentives, negotiated transitional service agreements, and managed complex separation matters."
+                "summary": "Advised international PE firm on $4.2M carve-out of manufacturing division from publicly-listed conglomerate. Structured management equity incentives, negotiated transitional service agreements, and managed complex separation matters."
             },
             {
                 "title": "International Arbitration - Energy Sector Dispute",
@@ -91,33 +91,33 @@ class Command(BaseCommand):
         credentials = [
             {
                 "title": "Bachelor of Laws (LLB), First Class Honours",
-                "institution": "University of Nairobi",
-                "year": "1992"
+                "institution": "Kisii University",
+                "year": "2024"
             },
             {
                 "title": "Master of Laws (LLM) - Corporate & Commercial Law",
                 "institution": "London School of Economics and Political Science",
-                "year": "1995"
+                "year": "2026"
             },
             {
                 "title": "Senior Advocate of the High Court of Kenya",
-                "institution": "Chief Justice of Kenya",
-                "year": "2008"
+                "institution": "Kenya Bar Association",
+                "year": "2025"
             },
             {
                 "title": "Certificate in International Arbitration",
-                "institution": "Chartered Institute of Arbitrators, London",
-                "year": "1998"
+                "institution": "Chartered Institute of Arbitrators",
+                "year": "2025"
             },
             {
                 "title": "Advanced Management Program",
-                "institution": "Harvard Business School",
-                "year": "2012"
+                "institution": "USIU-Africa",
+                "year": "2023"
             },
             {
                 "title": "Admitted to Practice",
                 "institution": "High Court of Kenya, Court of Appeal, Supreme Court",
-                "year": "1993"
+                "year": "2024"
             },
         ]
 
@@ -150,13 +150,13 @@ are achieved or compromised."""
         # ACHIEVEMENTS - Impressive metrics
         achievements = [
             {
-                "metric": "32+",
+                "metric": "7+",
                 "label": "Years of Practice",
                 "description": "Three decades advising on the most complex legal matters across East Africa and internationally",
                 "order": 1
             },
             {
-                "metric": "$8.5B+",
+                "metric": "$85M+",
                 "label": "Transaction Value",
                 "description": "Cumulative value of M&A, capital markets, and financing transactions successfully closed",
                 "order": 2
@@ -269,7 +269,7 @@ are achieved or compromised."""
             {
                 "title": "Senior Counsel Recognition",
                 "organization": "Chief Justice of Kenya",
-                "year": "2008",
+                "year": "2025",
                 "order": 6,
                 "is_active": True
             },
@@ -297,7 +297,7 @@ are achieved or compromised."""
             {
                 "title": "Advisory Board Member",
                 "organization": "Harvard Law School Africa Initiative",
-                "year": "2019",
+                "year": "2025",
                 "order": 10,
                 "is_active": True
             },
