@@ -26,7 +26,6 @@ class PhilosophySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
-# NEW SERIALIZERS
 class ContactInquirySerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactInquiry
@@ -46,7 +45,7 @@ class ContactInquirySerializer(serializers.ModelSerializer):
     
     def validate_details(self, value):
         """Ensure details has minimum length"""
-        if len(value) < 100:
+        if len(value.strip()) < 100:
             raise serializers.ValidationError(
                 "Please provide at least 100 characters describing your matter."
             )
@@ -57,7 +56,12 @@ class ContactInquirySerializer(serializers.ModelSerializer):
         if not value or '@' not in value:
             raise serializers.ValidationError("Please provide a valid email address.")
         return value.lower()
-
+    
+    def validate_phone(self, value):
+        """Basic phone validation"""
+        if not value or len(value.strip()) < 10:
+            raise serializers.ValidationError("Please provide a valid phone number.")
+        return value
 
 class AchievementSerializer(serializers.ModelSerializer):
     class Meta:

@@ -3,7 +3,6 @@ import { motion } from "framer-motion";
 import { api } from "../services/api";
 
 export default function EliteContact() {
-  // React state (camelCase for inputs)
   const [formData, setFormData] = useState({
     fullName: "",
     company: "",
@@ -17,18 +16,40 @@ export default function EliteContact() {
 
   const [status, setStatus] = useState({ type: "", message: "" });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errors, setErrors] = useState({});
 
-  // Handle input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error for this field when user starts typing
+    if (errors[name]) {
+      setErrors((prev) => ({ ...prev, [name]: "" }));
+    }
   };
 
-  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsSubmitting(true);
     setStatus({ type: "", message: "" });
+    setErrors({});
+
+    // Client-side validation
+    const newErrors = {};
+    if (formData.details.length < 100) {
+      newErrors.details = "Please provide at least 100 characters describing your matter.";
+    }
+    if (!formData.email.includes("@")) {
+      newErrors.email = "Please provide a valid email address.";
+    }
+    if (formData.phone.length < 10) {
+      newErrors.phone = "Please provide a valid phone number.";
+    }
+
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      setIsSubmitting(false);
+      return;
+    }
 
     try {
       // Map camelCase to snake_case for Django API
@@ -43,12 +64,15 @@ export default function EliteContact() {
         referral_source: formData.referralSource,
       };
 
-      await api.post("/contact/", payload);
+      console.log("Sending payload:", payload); // Debug log
+
+      const response = await api.post("/contact/", payload);
+      
+      console.log("Response:", response.data); // Debug log
 
       setStatus({
         type: "success",
-        message:
-          "Thank you. Your inquiry has been received and will be reviewed within 24 hours.",
+        message: "Thank you. Your inquiry has been received and will be reviewed within 24 hours.",
       });
 
       // Reset form
@@ -62,12 +86,39 @@ export default function EliteContact() {
         details: "",
         referralSource: "",
       });
+
+      // Scroll to success message
+      setTimeout(() => {
+        document.getElementById("contact")?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
+
     } catch (error) {
-      setStatus({
-        type: "error",
-        message:
-          "Unable to submit inquiry. Please contact us directly via phone.",
-      });
+      console.error("Submission error:", error);
+      
+      // Handle validation errors from backend
+      if (error.response?.data) {
+        const backendErrors = error.response.data;
+        const formattedErrors = {};
+        
+        // Convert snake_case backend errors to camelCase for frontend
+        Object.keys(backendErrors).forEach(key => {
+          const camelKey = key.replace(/_([a-z])/g, (g) => g[1].toUpperCase());
+          formattedErrors[camelKey] = Array.isArray(backendErrors[key]) 
+            ? backendErrors[key][0] 
+            : backendErrors[key];
+        });
+        
+        setErrors(formattedErrors);
+        setStatus({
+          type: "error",
+          message: "Please correct the errors below and try again.",
+        });
+      } else {
+        setStatus({
+          type: "error",
+          message: "Unable to submit inquiry. Please contact us directly via phone or try again later.",
+        });
+      }
     } finally {
       setIsSubmitting(false);
     }
@@ -79,7 +130,6 @@ export default function EliteContact() {
       className="px-6 md:px-24 py-32 bg-gradient-to-b from-black/20 to-transparent"
     >
       <div className="max-w-4xl mx-auto">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -96,7 +146,6 @@ export default function EliteContact() {
           </p>
         </motion.div>
 
-        {/* Form */}
         <motion.form
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -108,10 +157,7 @@ export default function EliteContact() {
           {/* Personal Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label
-                htmlFor="fullName"
-                className="block text-sm font-medium mb-2"
-              >
+              <label htmlFor="fullName" className="block text-sm font-medium mb-2">
                 Full Name <span className="text-champagne">*</span>
               </label>
               <input
@@ -122,14 +168,18 @@ export default function EliteContact() {
                 onChange={handleChange}
                 required
                 placeholder="John Doe"
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-champagne/50 focus:outline-none focus:ring-1 focus:ring-champagne/30 transition-all"
+                className={`w-full px-4 py-3 bg-white/5 border rounded-lg focus:outline-none focus:ring-1 transition-all ${
+                  errors.fullName 
+                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500/30' 
+                    : 'border-white/10 focus:border-champagne/50 focus:ring-champagne/30'
+                }`}
               />
+              {errors.fullName && (
+                <p className="mt-1 text-sm text-red-400">{errors.fullName}</p>
+              )}
             </div>
             <div>
-              <label
-                htmlFor="company"
-                className="block text-sm font-medium mb-2"
-              >
+              <label htmlFor="company" className="block text-sm font-medium mb-2">
                 Company / Organization
               </label>
               <input
@@ -147,10 +197,7 @@ export default function EliteContact() {
           {/* Contact Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium mb-2"
-              >
+              <label htmlFor="email" className="block text-sm font-medium mb-2">
                 Email Address <span className="text-champagne">*</span>
               </label>
               <input
@@ -161,14 +208,18 @@ export default function EliteContact() {
                 onChange={handleChange}
                 required
                 placeholder="john@example.com"
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-champagne/50 focus:outline-none focus:ring-1 focus:ring-champagne/30 transition-all"
+                className={`w-full px-4 py-3 bg-white/5 border rounded-lg focus:outline-none focus:ring-1 transition-all ${
+                  errors.email 
+                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500/30' 
+                    : 'border-white/10 focus:border-champagne/50 focus:ring-champagne/30'
+                }`}
               />
+              {errors.email && (
+                <p className="mt-1 text-sm text-red-400">{errors.email}</p>
+              )}
             </div>
             <div>
-              <label
-                htmlFor="phone"
-                className="block text-sm font-medium mb-2"
-              >
+              <label htmlFor="phone" className="block text-sm font-medium mb-2">
                 Phone Number <span className="text-champagne">*</span>
               </label>
               <input
@@ -179,18 +230,22 @@ export default function EliteContact() {
                 onChange={handleChange}
                 required
                 placeholder="+254 XXX XXX XXX"
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-champagne/50 focus:outline-none focus:ring-1 focus:ring-champagne/30 transition-all"
+                className={`w-full px-4 py-3 bg-white/5 border rounded-lg focus:outline-none focus:ring-1 transition-all ${
+                  errors.phone 
+                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500/30' 
+                    : 'border-white/10 focus:border-champagne/50 focus:ring-champagne/30'
+                }`}
               />
+              {errors.phone && (
+                <p className="mt-1 text-sm text-red-400">{errors.phone}</p>
+              )}
             </div>
           </div>
 
           {/* Matter Info */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div>
-              <label
-                htmlFor="matterType"
-                className="block text-sm font-medium mb-2"
-              >
+              <label htmlFor="matterType" className="block text-sm font-medium mb-2">
                 Type of Legal Matter <span className="text-champagne">*</span>
               </label>
               <select
@@ -199,7 +254,11 @@ export default function EliteContact() {
                 value={formData.matterType}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-champagne/50 focus:outline-none focus:ring-1 focus:ring-champagne/30 transition-all"
+                className={`w-full px-4 py-3 bg-white/5 border rounded-lg focus:outline-none focus:ring-1 transition-all ${
+                  errors.matterType 
+                    ? 'border-red-500 focus:border-red-500 focus:ring-red-500/30' 
+                    : 'border-white/10 focus:border-champagne/50 focus:ring-champagne/30'
+                }`}
               >
                 <option value="">Select matter type</option>
                 <option value="corporate">Corporate & Commercial</option>
@@ -211,6 +270,9 @@ export default function EliteContact() {
                 <option value="regulatory">Regulatory Compliance</option>
                 <option value="other">Other (specify in details)</option>
               </select>
+              {errors.matterType && (
+                <p className="mt-1 text-sm text-red-400">{errors.matterType}</p>
+              )}
             </div>
             <div>
               <label htmlFor="urgency" className="block text-sm font-medium mb-2">
@@ -242,20 +304,29 @@ export default function EliteContact() {
               onChange={handleChange}
               required
               rows={6}
-              placeholder="Provide a detailed description of your legal matter..."
-              className="w-full px-4 py-3 bg-white/5 border border-white/10 rounded-lg focus:border-champagne/50 focus:outline-none focus:ring-1 focus:ring-champagne/30 transition-all resize-none"
+              placeholder="Provide a detailed description of your legal matter... (minimum 100 characters)"
+              className={`w-full px-4 py-3 bg-white/5 border rounded-lg focus:outline-none focus:ring-1 transition-all resize-none ${
+                errors.details 
+                  ? 'border-red-500 focus:border-red-500 focus:ring-red-500/30' 
+                  : 'border-white/10 focus:border-champagne/50 focus:ring-champagne/30'
+              }`}
             />
-            <p className="text-xs text-muted mt-2">
-              Minimum 100 characters. All communications are protected by attorney-client privilege.
-            </p>
+            <div className="flex justify-between items-center mt-2">
+              <p className="text-xs text-muted">
+                All communications are protected by attorney-client privilege.
+              </p>
+              <p className={`text-xs ${formData.details.length >= 100 ? 'text-green-400' : 'text-muted'}`}>
+                {formData.details.length}/100 characters
+              </p>
+            </div>
+            {errors.details && (
+              <p className="mt-1 text-sm text-red-400">{errors.details}</p>
+            )}
           </div>
 
           {/* Referral */}
           <div>
-            <label
-              htmlFor="referralSource"
-              className="block text-sm font-medium mb-2"
-            >
+            <label htmlFor="referralSource" className="block text-sm font-medium mb-2">
               How did you hear about us?
             </label>
             <input
@@ -269,7 +340,7 @@ export default function EliteContact() {
             />
           </div>
 
-          {/* Status */}
+          {/* Status Message */}
           {status.message && (
             <motion.div
               initial={{ opacity: 0, y: -10 }}
@@ -280,11 +351,11 @@ export default function EliteContact() {
                   : "bg-red-500/10 border-red-500/30 text-red-400"
               }`}
             >
-              {status.message}
+              <p className="font-medium">{status.message}</p>
             </motion.div>
           )}
 
-          {/* Submit */}
+          {/* Submit Button */}
           <div className="flex justify-center pt-4">
             <button
               type="submit"
