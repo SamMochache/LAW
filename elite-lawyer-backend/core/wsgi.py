@@ -1,20 +1,14 @@
-"""
-WSGI config for core project - Vercel deployment
-"""
-
 import os
 import sys
 
-from django.core.wsgi import get_wsgi_application
-
 # Add the project directory to the sys.path
-path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-if path not in sys.path:
-    sys.path.append(path)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'core.settings')
 
+from django.core.wsgi import get_wsgi_application
+
 application = get_wsgi_application()
 
-# Vercel serverless handler
+# Vercel needs this
 app = application
