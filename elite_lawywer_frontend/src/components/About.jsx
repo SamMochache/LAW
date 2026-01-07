@@ -7,7 +7,7 @@ export default function About() {
 
       <div className="space-y-8 text-lg leading-relaxed text-muted">
         <p>
-          A Senior Advocate of the High Court of Kenya, with decades of
+          A Senior Advocate of the High Court of Kenya, with
           experience advising corporate leaders, institutional clients,
           and private individuals on complex legal matters.
         </p>
